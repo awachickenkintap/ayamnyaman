@@ -2,33 +2,46 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>AWA CHICKEN KINTAP</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
-  font-family: 'Inter', sans-serif;
   margin: 0;
+  font-family: 'Inter', sans-serif;
   background: #f5f6f8;
-  color: #222;
+  user-select: none;
 }
 
 /* HEADER */
 header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background: #ff4d4d;
+  color: white;
+  padding: 14px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  background: #ff4d4d;
-  color: white;
-  font-weight: 600;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .cart {
   position: relative;
-  font-size: 1.6em;
+  font-size: 22px;
   cursor: pointer;
 }
 
@@ -39,58 +52,56 @@ header {
   background: black;
   color: white;
   font-size: 10px;
-  padding: 3px 6px;
+  padding: 2px 5px;
   border-radius: 50%;
 }
 
 /* MENU */
 .menu-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  position: fixed;
+  top: 50px;
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
   background: white;
   border-bottom: 1px solid #eee;
 }
 
 .menu-item {
-  padding: 14px;
+  flex: 1;
+  min-width: 80px;
+  padding: 12px;
   text-align: center;
-  cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
 }
 
 .menu-item.active {
   color: #ff4d4d;
-  border-bottom: 3px solid #ff4d4d;
+  border-bottom: 2px solid #ff4d4d;
 }
 
-.menu-item:hover {
-  background: #fff0f0;
+/* CONTENT */
+.content {
+  margin-top: 100px;
+  padding: 12px;
 }
 
-/* PRODUK */
-.produk-page {
-  padding: 15px;
-}
-
+/* GRID */
 .produk-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: 12px;
 }
 
+/* CARD */
 .produk-card {
   background: white;
   border-radius: 14px;
-  padding: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: all 0.2s;
-}
-
-.produk-card:hover {
-  transform: translateY(-3px);
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
 }
 
 .produk-card img {
@@ -98,15 +109,18 @@ header {
   border-radius: 10px;
 }
 
+/* TEXT */
 .produk-title {
+  font-size: 13px;
   font-weight: 600;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .produk-price {
-  color: #ff4d4d;
+  font-size: 13px;
   font-weight: 700;
-  margin-bottom: 8px;
+  color: #ff4d4d;
+  margin-bottom: 6px;
 }
 
 /* QTY */
@@ -114,72 +128,73 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 6px;
 }
 
-.qty-control button {
-  width: 30px;
-  height: 30px;
+.qty-btn {
+  width: 32px;
+  height: 32px;
   border: none;
-  background: #ff4d4d;
-  color: white;
-  border-radius: 6px;
+  background: #f1f1f1;
+  border-radius: 8px;
   font-size: 16px;
-  cursor: pointer;
+}
+
+.qty-value {
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* BUTTON */
 .add-cart {
-  margin-top: 10px;
+  margin-top: 8px;
   padding: 10px;
   width: 100%;
-  background: #ff4d4d;
-  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
+  color: white;
+  background: #ff4d4d;
 }
 
-.add-cart:hover {
-  background: #e60000;
+/* SAFE AREA (biar tidak ketutup bawah HP) */
+.safe-bottom {
+  height: 30px;
 }
 </style>
-
 </head>
-<body>
+
+<body oncontextmenu="return false">
 
 <header>
-  <div>AWA CHICKEN KINTAP</div>
+  <div class="brand">AWA CHICKEN KINTAP</div>
   <div class="cart" onclick="goToCart()">
     🛒
     <div class="cart-badge" id="cartCount">0</div>
   </div>
 </header>
 
-<!-- MENU -->
 <div class="menu-grid">
   <div class="menu-item active" onclick="setActive(this)">Produk</div>
-  <div class="menu-item" onclick="setActive(this)">Siap Makan</div>
+  <div class="menu-item" onclick="setActive(this)">Siap</div>
   <div class="menu-item" onclick="setActive(this)">Hemat</div>
   <div class="menu-item" onclick="setActive(this)">Keluarga</div>
   <div class="menu-item" onclick="setActive(this)">Acara</div>
 </div>
 
-<!-- PRODUK -->
-<div class="produk-page">
+<div class="content">
   <div class="produk-grid">
 
     <div class="produk-card">
       <img src="sayap.jpeg">
       <div class="produk-title">Sayap</div>
       <div class="produk-price">Rp7.000</div>
+
       <div class="qty-control">
-        <button onclick="decreaseQty(this)">-</button>
-        <span>1</span>
-        <button onclick="increaseQty(this)">+</button>
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <div class="qty-value">1</div>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
       </div>
+
       <button class="add-cart">Tambah</button>
     </div>
 
@@ -187,11 +202,13 @@ header {
       <img src="dada.jpeg">
       <div class="produk-title">Dada</div>
       <div class="produk-price">Rp9.000</div>
+
       <div class="qty-control">
-        <button onclick="decreaseQty(this)">-</button>
-        <span>1</span>
-        <button onclick="increaseQty(this)">+</button>
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <div class="qty-value">1</div>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
       </div>
+
       <button class="add-cart">Tambah</button>
     </div>
 
@@ -199,11 +216,13 @@ header {
       <img src="paha.jpeg">
       <div class="produk-title">Paha</div>
       <div class="produk-price">Rp8.000</div>
+
       <div class="qty-control">
-        <button onclick="decreaseQty(this)">-</button>
-        <span>1</span>
-        <button onclick="increaseQty(this)">+</button>
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <div class="qty-value">1</div>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
       </div>
+
       <button class="add-cart">Tambah</button>
     </div>
 
@@ -211,61 +230,71 @@ header {
       <img src="kulit.jpeg">
       <div class="produk-title">Kulit</div>
       <div class="produk-price">Rp5.000</div>
+
       <div class="qty-control">
-        <button onclick="decreaseQty(this)">-</button>
-        <span>1</span>
-        <button onclick="increaseQty(this)">+</button>
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <div class="qty-value">1</div>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
       </div>
+
       <button class="add-cart">Tambah</button>
     </div>
 
   </div>
 </div>
 
+<div class="safe-bottom"></div>
+
 <script>
 
-// ACTIVE MENU
+// disable copy
+document.addEventListener("keydown", function(e) {
+  if (e.ctrlKey && (e.key === 'c' || e.key === 'u')) {
+    e.preventDefault();
+  }
+});
+
+// menu
 function setActive(el){
   document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
   el.classList.add('active');
 }
 
-// QTY
+// qty
 function increaseQty(btn){
-  let span = btn.parentElement.querySelector('span');
-  span.textContent = parseInt(span.textContent)+1;
+  let val = btn.parentElement.querySelector('.qty-value');
+  val.textContent = parseInt(val.textContent)+1;
 }
 
 function decreaseQty(btn){
-  let span = btn.parentElement.querySelector('span');
-  if(span.textContent > 1){
-    span.textContent = parseInt(span.textContent)-1;
+  let val = btn.parentElement.querySelector('.qty-value');
+  if(val.textContent > 1){
+    val.textContent = parseInt(val.textContent)-1;
   }
 }
 
-// CART
+// cart
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 document.querySelectorAll('.add-cart').forEach(btn=>{
   btn.addEventListener('click', function(){
     let card = btn.closest('.produk-card');
     let name = card.querySelector('.produk-title').textContent;
-    let qty = parseInt(card.querySelector('span').textContent);
+    let qty = parseInt(card.querySelector('.qty-value').textContent);
 
     cart.push({name, qty});
     localStorage.setItem("cart", JSON.stringify(cart));
 
-    updateCartCount();
+    updateCart();
   });
 });
 
-// UPDATE BADGE
-function updateCartCount(){
+function updateCart(){
   document.getElementById('cartCount').textContent = cart.length;
 }
-updateCartCount();
 
-// GO CART
+updateCart();
+
 function goToCart(){
   window.location.href = "keranjang.html";
 }
