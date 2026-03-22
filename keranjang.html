@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keranjang</title>
+
+<style>
+body {
+  font-family: Arial;
+  padding: 20px;
+}
+
+.item {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.form {
+  display: none;
+  margin-top: 20px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Keranjang</h2>
+
+<div id="cartItems"></div>
+
+<button onclick="showForm()">Pesan</button>
+
+<div class="form" id="formPesan">
+  <input type="text" placeholder="Nomor WA" id="wa">
+  <input type="text" placeholder="Alamat" id="alamat">
+
+  <select id="metode">
+    <option>Transfer</option>
+    <option>QRIS</option>
+    <option>COD</option>
+  </select>
+
+  <button onclick="kirimPesanan()">OK</button>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let container = document.getElementById("cartItems");
+
+cart.forEach(item => {
+  let div = document.createElement("div");
+  div.className = "item";
+  div.textContent = item.name + " x " + item.qty;
+  container.appendChild(div);
+});
+
+function showForm() {
+  document.getElementById("formPesan").style.display = "block";
+}
+
+function kirimPesanan() {
+  let wa = document.getElementById("wa").value;
+  let alamat = document.getElementById("alamat").value;
+  let metode = document.getElementById("metode").value;
+
+  if (!wa || !alamat) {
+    alert("Isi data dulu!");
+    return;
+  }
+
+  alert("Hadangi pesanan Pian disiapkan, makasih sudah nukar di Ulun");
+
+  localStorage.removeItem("cart");
+}
+</script>
+
+</body>
+</html>
