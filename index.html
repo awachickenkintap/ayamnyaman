@@ -1,98 +1,122 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AWA CHICKEN KINTAP</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fff;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWA CHICKEN KINTAP</title>
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      background-color: #ff4d4d;
-      color: white;
-    }
+<style>
+body {
+  font-family: 'Segoe UI', Arial;
+  margin: 0;
+  background: #fafafa;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 1.5em;
-    }
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #ff4d4d;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
 
-    .cart {
-      font-size: 1.5em;
-      cursor: pointer;
-    }
+.cart {
+  font-size: 1.5em;
+  cursor: pointer;
+}
 
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 5px;
-      padding: 10px 20px;
-      background: #ffe6e6;
-    }
+/* MENU */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: #fff;
+  border-bottom: 2px solid #eee;
+}
 
-    .menu-item {
-      background: #fff;
-      border: 2px solid #ff4d4d;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      font-weight: bold;
-    }
+.menu-item {
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  border-bottom: 3px solid transparent;
+  transition: 0.2s;
+}
 
-    .produk-page {
-      display: none;
-      padding: 10px 20px;
-    }
+.menu-item:hover {
+  background: #ffe6e6;
+}
 
-    .produk-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
+.menu-item.active {
+  border-bottom: 3px solid #ff4d4d;
+  color: #ff4d4d;
+}
 
-    .produk-card {
-      border: 3px solid #ff4d4d;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+/* PRODUK */
+.produk-page {
+  padding: 15px;
+}
 
-    .produk-card img {
-      width: 100%;
-      margin-bottom: 10px;
-    }
+.produk-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
 
-    .qty-control {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+.produk-card {
+  border: 2px solid #ff4d4d;
+  border-radius: 10px;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
 
-    .qty-control button {
-      padding: 5px 10px;
-      cursor: pointer;
-    }
+.produk-card:hover {
+  transform: scale(1.02);
+}
 
-    .add-cart {
-      margin-top: 10px;
-      padding: 5px 15px;
-      background-color: #ff4d4d;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
-  </style>
+.produk-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.produk-card p {
+  margin: 8px 0;
+  font-weight: bold;
+}
+
+.qty-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-control button {
+  padding: 5px 10px;
+  border: none;
+  background: #ff4d4d;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-cart {
+  margin-top: 8px;
+  padding: 8px;
+  width: 100%;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+</style>
+
 </head>
 <body>
 
@@ -101,15 +125,18 @@
   <div class="cart" onclick="goToCart()">🛒</div>
 </header>
 
+<!-- MENU -->
 <div class="menu-grid">
-  <div class="menu-item" onclick="showProduk()">Produk</div>
-  <div class="menu-item">Paket Siap Makan</div>
-  <div class="menu-item">Paket Hemat</div>
-  <div class="menu-item">Paket Keluarga</div>
-  <div class="menu-item">Paket Acara</div>
+  <div class="menu-item active" onclick="showMenu(this)">Produk</div>
+  <div class="menu-item" onclick="showMenu(this)">Paket Siap Makan</div>
+  <div class="menu-item" onclick="showMenu(this)">Paket Hemat</div>
+  <div class="menu-item" onclick="showMenu(this)">Paket Keluarga</div>
+  <div class="menu-item" onclick="showMenu(this)">Paket Acara</div>
 </div>
 
-<div class="produk-page" id="produkPage">
+<!-- PRODUK -->
+<div class="produk-page">
+
   <div class="produk-grid">
 
     <div class="produk-card">
@@ -157,14 +184,20 @@
     </div>
 
   </div>
+
 </div>
 
 <script>
-function showProduk() {
-  document.getElementById('produkPage').style.display = 'block';
-  window.scrollTo(0, document.getElementById('produkPage').offsetTop);
+
+// MENU ACTIVE
+function showMenu(element) {
+  document.querySelectorAll('.menu-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  element.classList.add('active');
 }
 
+// QTY
 function increaseQty(button) {
   const span = button.parentElement.querySelector('span');
   span.textContent = parseInt(span.textContent) + 1;
@@ -177,7 +210,7 @@ function decreaseQty(button) {
   }
 }
 
-// ===== LOCAL STORAGE CART =====
+// LOCAL STORAGE CART
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 document.querySelectorAll('.add-cart').forEach((button) => {
@@ -194,9 +227,11 @@ document.querySelectorAll('.add-cart').forEach((button) => {
   });
 });
 
+// GO TO CART
 function goToCart() {
   window.location.href = "keranjang.html";
 }
+
 </script>
 
 </body>
