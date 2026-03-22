@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWA CHICKEN KINTAP</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: #ff4d4d;
+      color: white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    .cart {
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      padding: 10px 20px;
+      background: #ffe6e6;
+    }
+
+    .menu-item {
+      background: #fff;
+      border: 2px solid #ff4d4d;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .produk-page {
+      display: none;
+      padding: 10px 20px;
+    }
+
+    .produk-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .produk-card {
+      border: 3px solid #ff4d4d;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .produk-card img {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-control button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .add-cart {
+      margin-top: 10px;
+      padding: 5px 15px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>AWA CHICKEN KINTAP</h1>
+  <div class="cart" onclick="goToCart()">🛒</div>
+</header>
+
+<div class="menu-grid">
+  <div class="menu-item" onclick="showProduk()">Produk</div>
+  <div class="menu-item">Paket Siap Makan</div>
+  <div class="menu-item">Paket Hemat</div>
+  <div class="menu-item">Paket Keluarga</div>
+  <div class="menu-item">Paket Acara</div>
+</div>
+
+<div class="produk-page" id="produkPage">
+  <div class="produk-grid">
+
+    <div class="produk-card">
+      <img src="sayap.jpeg" alt="Sayap">
+      <p>Sayap - Rp7.000</p>
+      <div class="qty-control">
+        <button onclick="decreaseQty(this)">-</button>
+        <span>1</span>
+        <button onclick="increaseQty(this)">+</button>
+      </div>
+      <button class="add-cart">Tambah Keranjang</button>
+    </div>
+
+    <div class="produk-card">
+      <img src="dada.jpeg" alt="Dada">
+      <p>Dada - Rp9.000</p>
+      <div class="qty-control">
+        <button onclick="decreaseQty(this)">-</button>
+        <span>1</span>
+        <button onclick="increaseQty(this)">+</button>
+      </div>
+      <button class="add-cart">Tambah Keranjang</button>
+    </div>
+
+    <div class="produk-card">
+      <img src="paha.jpeg" alt="Paha">
+      <p>Paha - Rp8.000</p>
+      <div class="qty-control">
+        <button onclick="decreaseQty(this)">-</button>
+        <span>1</span>
+        <button onclick="increaseQty(this)">+</button>
+      </div>
+      <button class="add-cart">Tambah Keranjang</button>
+    </div>
+
+    <div class="produk-card">
+      <img src="kulit.jpeg" alt="Kulit">
+      <p>Kulit - Rp5.000</p>
+      <div class="qty-control">
+        <button onclick="decreaseQty(this)">-</button>
+        <span>1</span>
+        <button onclick="increaseQty(this)">+</button>
+      </div>
+      <button class="add-cart">Tambah Keranjang</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showProduk() {
+  document.getElementById('produkPage').style.display = 'block';
+  window.scrollTo(0, document.getElementById('produkPage').offsetTop);
+}
+
+function increaseQty(button) {
+  const span = button.parentElement.querySelector('span');
+  span.textContent = parseInt(span.textContent) + 1;
+}
+
+function decreaseQty(button) {
+  const span = button.parentElement.querySelector('span');
+  if (parseInt(span.textContent) > 1) {
+    span.textContent = parseInt(span.textContent) - 1;
+  }
+}
+
+// ===== LOCAL STORAGE CART =====
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+document.querySelectorAll('.add-cart').forEach((button) => {
+  button.addEventListener('click', function () {
+    const card = button.closest('.produk-card');
+    const qty = parseInt(card.querySelector('span').textContent);
+    const name = card.querySelector('img').alt;
+
+    cart.push({ name, qty });
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    alert(name + " ditambahkan ke keranjang (" + qty + ")");
+  });
+});
+
+function goToCart() {
+  window.location.href = "keranjang.html";
+}
+</script>
+
+</body>
+</html>
