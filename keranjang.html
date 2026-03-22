@@ -5,49 +5,173 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Keranjang</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
 body {
-  font-family: Arial;
-  padding: 20px;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #f5f6f8;
 }
 
+/* HEADER */
+header {
+  background: #ff4d4d;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* CONTAINER */
+.container {
+  padding: 15px;
+}
+
+/* ITEM */
 .item {
-  border-bottom: 1px solid #ccc;
-  padding: 10px 0;
+  background: white;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-button {
-  margin-top: 10px;
+.item-info {
+  flex: 1;
+}
+
+.item-name {
+  font-weight: 600;
+}
+
+.item-price {
+  font-size: 13px;
+  color: #777;
+}
+
+/* QTY */
+.qty-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.qty-value {
+  min-width: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* DELETE */
+.delete-btn {
+  margin-left: 10px;
+  color: red;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* TOTAL */
+.total-box {
+  background: white;
+  margin: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* BOTTOM */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
   padding: 10px;
-  background: red;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.order-btn {
+  width: 100%;
+  padding: 14px;
+  background: #ff4d4d;
   color: white;
   border: none;
-  cursor: pointer;
-  width: 100%;
+  border-radius: 10px;
+  font-weight: 700;
 }
 
-.form {
+/* MODAL */
+.modal {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  border-radius: 16px 16px 0 0;
+  padding: 20px;
   display: none;
-  margin-top: 20px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
 }
 
 input, select {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.submit-btn {
+  margin-top: 15px;
+  width: 100%;
+  padding: 14px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.empty {
+  text-align: center;
+  margin-top: 40px;
+  color: #777;
 }
 </style>
 </head>
 
 <body>
 
-<h2>Keranjang</h2>
+<header>Keranjang</header>
 
-<div id="cartItems"></div>
+<div class="container" id="cartItems"></div>
 
-<button onclick="showForm()">Pesan</button>
+<div class="total-box">
+  <span>Total</span>
+  <span id="totalHarga">Rp0</span>
+</div>
 
-<div class="form" id="formPesan">
+<div class="bottom-bar">
+  <button class="order-btn" onclick="showForm()">Pesan Sekarang</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="formPesan">
+  <h3>Data Pemesanan</h3>
+
   <input type="text" placeholder="Nomor WA" id="wa">
   <input type="text" placeholder="Alamat" id="alamat">
 
@@ -57,31 +181,89 @@ input, select {
     <option>COD</option>
   </select>
 
-  <button onclick="kirimPesanan()">OK</button>
+  <button class="submit-btn" onclick="kirimPesanan()">Kirim Pesanan</button>
 </div>
 
 <script>
+
+let harga = {
+  "Sayap": 7000,
+  "Dada": 9000,
+  "Paha": 8000,
+  "Kulit": 5000
+};
+
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-let container = document.getElementById("cartItems");
+function renderCart(){
+  let container = document.getElementById("cartItems");
+  container.innerHTML = "";
+  let total = 0;
 
-cart.forEach(item => {
-  let div = document.createElement("div");
-  div.className = "item";
-  div.textContent = item.name + " x " + item.qty;
-  container.appendChild(div);
-});
+  if(cart.length === 0){
+    container.innerHTML = "<div class='empty'>Keranjang kosong</div>";
+    document.getElementById("totalHarga").textContent = "Rp0";
+    return;
+  }
 
-function showForm() {
+  cart.forEach((item, index) => {
+
+    let subtotal = harga[item.name] * item.qty;
+    total += subtotal;
+
+    let div = document.createElement("div");
+    div.className = "item";
+
+    div.innerHTML = `
+      <div class="item-info">
+        <div class="item-name">${item.name}</div>
+        <div class="item-price">Rp${harga[item.name]}</div>
+      </div>
+
+      <div class="qty-box">
+        <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+        <div class="qty-value">${item.qty}</div>
+        <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+      </div>
+
+      <div class="delete-btn" onclick="removeItem(${index})">🗑️</div>
+    `;
+
+    container.appendChild(div);
+  });
+
+  document.getElementById("totalHarga").textContent = "Rp" + total;
+}
+
+function changeQty(index, change){
+  cart[index].qty += change;
+
+  if(cart[index].qty <= 0){
+    cart.splice(index,1);
+  }
+
+  save();
+}
+
+function removeItem(index){
+  cart.splice(index,1);
+  save();
+}
+
+function save(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+function showForm(){
   document.getElementById("formPesan").style.display = "block";
 }
 
-function kirimPesanan() {
+function kirimPesanan(){
   let wa = document.getElementById("wa").value;
   let alamat = document.getElementById("alamat").value;
-  let metode = document.getElementById("metode").value;
 
-  if (!wa || !alamat) {
+  if(!wa || !alamat){
     alert("Isi data dulu!");
     return;
   }
@@ -89,7 +271,11 @@ function kirimPesanan() {
   alert("Hadangi pesanan Pian disiapkan, makasih sudah nukar di Ulun");
 
   localStorage.removeItem("cart");
+  location.reload();
 }
+
+renderCart();
+
 </script>
 
 </body>
